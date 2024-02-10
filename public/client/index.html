@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Notification Demo</title>
+    <script>
+        // Memeriksa apakah service worker dan push messaging didukung
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+            console.log('Service Worker dan Push Messaging didukung');
+
+            // Mendaftarkan service worker
+            navigator.serviceWorker.register('service-worker.js')
+                .then(function(swReg) {
+                    console.log('Service Worker terdaftar', swReg);
+
+                    // Meminta izin untuk notifikasi
+                    Notification.requestPermission().then(function(status) {
+                        if (status === 'granted') {
+                            console.log('Izin notifikasi diterima');
+                            
+                            // Mendapatkan subscription
+                            swReg.pushManager.getSubscription()
+                                .then(function(subscription) {
+                                    if (!subscription) {
+                                        // Subscribe user (Isi Dengan Public Key)
+                                        const applicationServerKey = urlBase64ToUint8Array('BJZ5NFQDxJ9AB4kGx7qZd2eNwTTpCJovGk0xmdWcrXehe3dpypN4gaIAoao_UJ8mbGT9OnnkhprhR-MBX-4rk7c');
+                                        swReg.pushManager.subscribe({
+                                            userVisibleOnly: true,
+                                            applicationServerKey: applicationServerKey
+                                        })
+                                        .then(function(subscription) {
+                                            console.log('Berhasil melakukan subscribe.');
+
+                                            // Kirim subscription ke server
+                                            fetch('/subscribe', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                },
+                                                body: JSON.stringify(subscription),
+                                            });
+                                        })
+                                        .catch(function(err) {
+                                            console.warn('Gagal melakukan subscribe:', err);
+                                        });
+                                    }
+                                });
+                        }
+                    });
+                })
+                .catch(function(error) {
+                    console.error('Gagal mendaftarkan service worker:', error);
+                });
+        }
+
+        // Fungsi untuk mengubah VAPID key dari URL-safe base64 string menjadi Uint8Array
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding)
+                .replace(/\-/g, '+')
+                .replace(/_/g, '/');
+
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+    </script>
+</head>
+<body>
+    <h1>PWA Notification Demo</h1>
+    <p>Register for push messaging here.</p>
+</body>
+</html>
