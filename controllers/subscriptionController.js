@@ -16,4 +16,20 @@ const saveSubscription = (req, res) => {
   });
 };
 
-module.exports = { saveSubscription };
+const update_username = (req, res) => {
+  const { username, subscriptionEndpoint } = req.body;
+
+  // Query untuk mencari dan update username berdasarkan endpoint
+  const query = "UPDATE subs SET username = ? WHERE endpoint = ?";
+
+  pool.execute(query, [username, subscriptionEndpoint], (err, results) => {
+    if (err) {
+      console.error("Error saat update username:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+    res.status(200).json({ message: "Username updated successfully." });
+  });
+};
+
+module.exports = { saveSubscription, update_username };

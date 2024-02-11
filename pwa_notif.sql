@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 10, 2024 at 09:11 PM
+-- Generation Time: Feb 11, 2024 at 03:31 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `subs` (
   `id` int(11) NOT NULL,
+  `username` text DEFAULT NULL,
   `endpoint` text DEFAULT NULL,
   `p256dh` text DEFAULT NULL,
   `auth` text DEFAULT NULL
@@ -38,8 +39,8 @@ CREATE TABLE `subs` (
 -- Dumping data for table `subs`
 --
 
-INSERT INTO `subs` (`id`, `endpoint`, `p256dh`, `auth`) VALUES
-(1, 'https://fcm.googleapis.com/fcm/send/eBomiotgzrI:APA91bFGx8PAAAxkC46n7ZxcBvbhHNw7jupkc_vZXvLIoxqOT8ZLMOXLHLy5vM-hfUHOqHtc_LAkJnEJhyeEkJVV4kfCUYkX1xmu-PYO-JVgN4Tl8Tt8PETiDglBeWZMFGaZWNcsf835', 'BErlP-cEzzgLcr4x2KI76JtSCVSRaeMPHBRXvSaBhIIXYw0jrmEtfD4JyswkPHLP0qIaILmJFNDC4ooe6GFAwG0', 'aK63GNLnINkIpKlDv1YE8Q');
+INSERT INTO `subs` (`id`, `username`, `endpoint`, `p256dh`, `auth`) VALUES
+(1, 'apip', 'https://fcm.googleapis.com/fcm/send/eBomiotgzrI:APA91bFGx8PAAAxkC46n7ZxcBvbhHNw7jupkc_vZXvLIoxqOT8ZLMOXLHLy5vM-hfUHOqHtc_LAkJnEJhyeEkJVV4kfCUYkX1xmu-PYO-JVgN4Tl8Tt8PETiDglBeWZMFGaZWNcsf835', 'BErlP-cEzzgLcr4x2KI76JtSCVSRaeMPHBRXvSaBhIIXYw0jrmEtfD4JyswkPHLP0qIaILmJFNDC4ooe6GFAwG0', 'aK63GNLnINkIpKlDv1YE8Q');
 
 --
 -- Indexes for dumped tables
